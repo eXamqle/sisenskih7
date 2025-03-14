@@ -1542,10 +1542,15 @@
 
         // Handle scroll events
         function handleScroll() {
-            // Update scroll progress
-            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = (window.pageYOffset / totalHeight) * 100;
-            scrollProgress.style.width = progress + '%';
+			// Ensure pageYOffset is never negative
+			const scrollPosition = Math.max(0, window.pageYOffset);
+    
+			// Update scroll progress
+			const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+			const progress = totalHeight > 0 ? (scrollPosition / totalHeight) * 100 : 0;
+			
+			// Ensure progress is between 0 and 100
+			scrollProgress.style.width = Math.min(100, Math.max(0, progress)) + '%';
 
             // Show/hide back to top button
             if (window.pageYOffset > 300) {
